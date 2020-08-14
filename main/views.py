@@ -3,15 +3,20 @@ from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .models import Post
-from .serializers import PostSerializer
+from .models import Post, Category
+from .permissions import IsPostAuthor
+from .serializers import PostSerializer, CategorySerializer
 
 
-# @api_view()
-# def posts_list(request):
-#     queryset = Post.objects.all()
-#     serializer = PostSerializer(queryset, many=True, context={'request': request})
-#     return Response(data=serializer.data, status=status.HTTP_200_OK)
+class CategoryListView(generics.ListAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+
+class CategoryDetailsView(generics.RetrieveAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    lookup_field = 'slug'
 
 
 class PostsListView(generics.ListAPIView):
@@ -43,18 +48,18 @@ class CreatePostView(generics.CreateAPIView):
 class UpdatePostView(generics.UpdateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    permission_classes = [IsPostAuthor, ]
 
 
 class DeletePostView(generics.DestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    permission_classes = [IsPostAuthor, ]
 
 
 
 
 # TODO: Viewsets
 # TODO: Pagination
-# TODO: Search
+# TODO: Search(F(), Q())
 # TODO: Filtering
-# TODO: Permission
-# TODO: Get author from request

@@ -38,4 +38,3 @@ class PostSerializer(serializers.ModelSerializer):
         representation['author'] = instance.author.email
         representation['image'] = self.__get_image_url(instance)
         return representation
-
